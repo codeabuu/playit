@@ -13,7 +13,7 @@ const Home = () => {
   return (
     <main>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-[#ea384c] to-[#ff719A] text-white py-24">
+      <section className="relative bg-gradient-to-r from-primary to-blue-600 text-white py-24">
         <div className="container-custom relative z-10">
           <div className="max-w-2xl mx-auto text-center">
             <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight">
@@ -24,7 +24,7 @@ const Home = () => {
               Your donation makes a direct impact on a child's life.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" variant="secondary" className="text-[#ea384c] font-semibold">
+              <Button asChild size="lg" variant="secondary" className="text-primary font-semibold">
                 <Link to="/campaigns">Support a Team</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10">
@@ -47,7 +47,7 @@ const Home = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+            <div className="bg-gray-50 p-6 rounded-lg">
               <div className="flex items-center gap-3 mb-4">
                 <CheckCircle className="text-success" size={24} />
                 <h3 className="font-heading text-xl font-semibold">100% Direct Funding</h3>
@@ -57,7 +57,7 @@ const Home = () => {
               </p>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+            <div className="bg-gray-50 p-6 rounded-lg">
               <div className="flex items-center gap-3 mb-4">
                 <CheckCircle className="text-success" size={24} />
                 <h3 className="font-heading text-xl font-semibold">Verified Campaigns</h3>
@@ -67,7 +67,7 @@ const Home = () => {
               </p>
             </div>
             
-            <div className="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+            <div className="bg-gray-50 p-6 rounded-lg">
               <div className="flex items-center gap-3 mb-4">
                 <CheckCircle className="text-success" size={24} />
                 <h3 className="font-heading text-xl font-semibold">See Your Impact</h3>
@@ -107,7 +107,7 @@ const Home = () => {
           </div>
           
           <div className="text-center mt-12">
-            <Button asChild size="lg" className="bg-[#ea384c] hover:bg-[#ea384c]/90">
+            <Button asChild size="lg">
               <Link to="/campaigns">View All Campaigns</Link>
             </Button>
           </div>
@@ -115,7 +115,7 @@ const Home = () => {
       </section>
       
       {/* Impact Stats */}
-      <section className="py-16 bg-gradient-to-r from-[#ea384c] to-[#ff719A] text-white">
+      <section className="py-16 bg-primary text-white">
         <div className="container-custom">
           <div className="text-center mb-12">
             <h2 className="font-heading text-3xl font-semibold mb-4">Our Impact Together</h2>
@@ -126,10 +126,10 @@ const Home = () => {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {impactStats.map((stat, index) => (
-              <div key={index} className="text-center bg-white/10 backdrop-blur-sm p-6 rounded-lg">
+              <div key={index} className="text-center">
                 <div className="text-4xl md:text-5xl font-heading font-bold mb-2">{stat.value}</div>
                 <div className="text-xl font-semibold mb-2">{stat.label}</div>
-                <p className="text-white/80">{stat.description}</p>
+                <p className="text-blue-100">{stat.description}</p>
               </div>
             ))}
           </div>
@@ -170,7 +170,7 @@ const Home = () => {
             Your donation, no matter the size, has a direct impact on young athletes in your community. 
             Help them build skills that last a lifetime.
           </p>
-          <Button asChild size="lg" className="text-lg px-8 bg-[#ea384c] hover:bg-[#ea384c]/90">
+          <Button asChild size="lg" className="text-lg px-8">
             <Link to="/campaigns">Donate Now</Link>
           </Button>
         </div>
