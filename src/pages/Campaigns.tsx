@@ -18,10 +18,10 @@ const Campaigns = () => {
       {/* Header */}
       <section className="bg-primary text-white py-16">
         <div className="container-custom text-center">
-          <h1 className="font-heading text-4xl font-bold mb-4">Support Youth Sports Teams</h1>
+          <h1 className="font-heading text-4xl font-bold mb-4">Youth Sports Campaigns</h1>
           <p className="text-xl max-w-3xl mx-auto">
-            Browse active campaigns and help young athletes achieve their full potential.
-            Every donation makes a difference.
+            Browse active fundraisers and help young athletes achieve their full potential.
+            Every donation provides opportunity and builds character.
           </p>
         </div>
       </section>
@@ -71,16 +71,16 @@ const Campaigns = () => {
       {/* Help Start a Campaign */}
       <section className="py-16 bg-gray-50">
         <div className="container-custom text-center">
-          <h2 className="font-heading text-3xl font-semibold mb-4">Need Help for Your Team?</h2>
+          <h2 className="font-heading text-3xl font-semibold mb-4">Start a Fundraising Campaign</h2>
           <p className="text-gray-600 text-lg max-w-3xl mx-auto mb-8">
-            If you're a coach or team manager looking to raise funds for your youth sports team, 
+            If you're a coach, parent, or team representative looking to raise funds for your youth sports team, 
             we'd love to help you create a campaign.
           </p>
           <a 
             href="/contact" 
             className="btn-primary inline-block"
           >
-            Submit Your Team
+            Submit Your Campaign
           </a>
         </div>
       </section>
