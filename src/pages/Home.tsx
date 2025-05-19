@@ -12,14 +12,22 @@ const Home = () => {
   
   return (
     <main>
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-primary to-blue-600 text-white py-24">
+      {/* Hero Section with Background Image */}
+      <section className="relative py-24">
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1518495973542-4542c06a5843" 
+            alt="Youth playing sports" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/50"></div>
+        </div>
         <div className="container-custom relative z-10">
           <div className="max-w-2xl mx-auto text-center">
-            <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight">
+            <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight text-white">
               Support Youth Sports in Your Community
             </h1>
-            <p className="text-xl mb-8">
+            <p className="text-xl mb-8 text-white">
               Help young athletes stay focused, build confidence, and develop teamwork skills through sports.
               Your donation makes a direct impact on a child's life.
             </p>
@@ -33,7 +41,6 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div className="absolute inset-0 bg-black/30 z-0"></div>
       </section>
       
       {/* Trust Elements */}
