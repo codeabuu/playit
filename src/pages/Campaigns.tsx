@@ -16,7 +16,7 @@ const Campaigns = () => {
   return (
     <main>
       {/* Header */}
-      <section className="bg-primary text-white py-16">
+      <section className="bg-gradient-to-r from-[#ea384c] to-[#ff719A] text-white py-16">
         <div className="container-custom text-center">
           <h1 className="font-heading text-4xl font-bold mb-4">Support Youth Sports Teams</h1>
           <p className="text-xl max-w-3xl mx-auto">
@@ -78,7 +78,7 @@ const Campaigns = () => {
           </p>
           <a 
             href="/contact" 
-            className="btn-primary inline-block"
+            className="bg-[#ea384c] hover:bg-[#ea384c]/90 text-white font-medium py-3 px-6 rounded-lg transition-all inline-block"
           >
             Submit Your Team
           </a>
