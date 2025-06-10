@@ -22,3 +22,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+postcss.config.js
+tailwind.config.js
+.vitepress/dist
+node_modules
+.vitepress/cache
+.vitepress/theme/styles
+.vitepress/theme/styles.css
+.vitepress/theme/styles.js 
+.vitepress/theme/styles.css.map
+.vitepress/theme/styles.js.map
