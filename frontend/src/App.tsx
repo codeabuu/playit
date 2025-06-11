@@ -13,6 +13,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import ThankYou from "./pages/ThankYou";
 import NotFound from "./pages/NotFound";
+import DonationVerify from "./components/paymentverif";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
               <Route path="/contact" element={<Contact />} />
               <Route path="/thank-you" element={<ThankYou />} />
               <Route path="*" element={<NotFound />} />
+              <Route path="/donations/verify/:reference" element={<DonationVerify />} />
             </Routes>
           </div>
           <Footer />

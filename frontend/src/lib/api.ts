@@ -1,12 +1,13 @@
-import axios from 'axios';
+// src/api/api.ts
+import axios, { AxiosError } from 'axios';
 
-const API_BASE_URL = "http://127.0.0.1:8000/";
+const API_BASE_URL = 'http://127.0.0.1:8000';
 
 interface DonationInitRequest {
-    email: string;
-    amount: number
-    campaign_id: number;
-    is_recurring?: boolean;
+  email: string;
+  amount: number;
+  campaign_id: number;
+  is_recurring?: boolean;
 }
 
 interface DonationInitResponse {
@@ -18,106 +19,84 @@ interface DonationInitResponse {
   };
 }
 
-interface DonationVerifyResponse {
-  status: string;
-  message: string;
-  data: {
-    amount: number;
-    is_recurring: boolean;
-    campaign_id: number;
-  };
-}
-
-interface CampaignStatsResponse {
+interface CampaignStats {
   campaign_id: number;
   total_raised: number;
   active_recurring_donations: number;
 }
 
-interface ApiError {
-  message: string;
-  details?: any;
+interface GenericResponse {
+  status: string;
+  message?: string;
+  data?: any;
 }
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
+    'Accept': 'application/json',
   },
+  transformRequest: [
+    (data) => JSON.stringify(data), // Explicit serialization
+  ],
 });
 
+// Initialize Donation
 export const initializeDonation = async (
-  donationData: DonationInitRequest
+  data: DonationInitRequest
 ): Promise<DonationInitResponse> => {
   try {
-    const response = await apiClient.post<DonationInitResponse>(
-      '/initialize',
-      donationData
-    );
+    console.log('Sending payload:', JSON.stringify(data, null, 2));
+    const response = await apiClient.post<DonationInitResponse>('/initialize', data);
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw {
-        message: error.response?.data?.error || 'Failed to initialize donation',
-        details: error.response?.data,
-      } as ApiError;
-    }
-    throw {
-      message: 'An unexpected error occurred during donation initialization',
-      details: error,
-    } as ApiError;
+    handleError(error);
+    throw error;
   }
 };
 
-
-export const verifyDonation = async (
-  reference: string
-): Promise<DonationVerifyResponse> => {
+// Verify Donation
+export const verifyDonation = async (reference: string): Promise<{status: boolean, message: string}> => {
   try {
-    const response = await apiClient.get<DonationVerifyResponse>(
-      `/verify/${reference}/`
-    );
-    return response.data;
+    const response = await apiClient.get(`/verify/${reference}/`);
+    return {
+      status: response.data.status === "success",
+      message: response.data.message || "Thank you for your donation!"
+    };
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw {
-        message: error.response?.data?.error || 'Failed to verify donation',
-        details: error.response?.data,
-      } as ApiError;
-    }
-    throw {
-      message: 'An unexpected error occurred during donation verification',
-      details: error,
-    } as ApiError;
+    handleError(error);
+    return {
+      status: false,
+      message: "Verification failed. Please contact support."
+    };
   }
 };
 
+// Get Campaign Stats
 export const getCampaignStats = async (
   campaignId: number
-): Promise<CampaignStatsResponse> => {
+): Promise<CampaignStats> => {
   try {
-    const response = await apiClient.get<CampaignStatsResponse>(
-      `/campaign/${campaignId}/stats/`
-    );
+    const response = await apiClient.get<CampaignStats>(`/campaign/${campaignId}/stats/`);
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw {
-        message: error.response?.data?.error || 'Failed to fetch campaign stats',
-        details: error.response?.data,
-      } as ApiError;
-    }
-    throw {
-      message: 'An unexpected error occurred while fetching campaign stats',
-      details: error,
-    } as ApiError;
+    handleError(error);
+    throw error;
   }
 };
 
-export const formatCurrency = (amount: number, currency: string = 'USD'): string => {
-  return new Intl.NumberFormat('en-NG', {
-    style: 'currency',
-    currency,
-    minimumFractionDigits: 2,
-  }).format(amount);
+// Redirect to Paystack
+export const redirectToPaystack = (url: string): void => {
+  window.location.href = url;
+};
+
+// Handle and log errors nicely
+const handleError = (error: unknown): void => {
+  if (axios.isAxiosError(error)) {
+    const err = error as AxiosError;
+    console.error('API Error:', err.response?.data || err.message);
+  } else {
+    console.error('Unexpected Error:', error);
+  }
 };

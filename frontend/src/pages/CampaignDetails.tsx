@@ -7,7 +7,7 @@ import DonationForm from '@/components/DonationForm';
 
 const CampaignDetails = () => {
   const { id } = useParams<{ id: string }>();
-  const campaign = campaigns.find(c => c.id === id);
+  const campaign = campaigns.find(c => c.id === Number(id));
   
   if (!campaign) {
     return (
@@ -114,7 +114,10 @@ const CampaignDetails = () => {
             {/* Sidebar - 1/3 width */}
             <div className="lg:col-span-1">
               <div className="sticky top-20">
-                <DonationForm campaignName={campaign.title} />
+                <DonationForm
+                campaignId={campaign.id}
+                campaignName={campaign.title}
+                />
                 
                 <div className="bg-gray-50 rounded-lg p-6 mt-6">
                   <h3 className="font-heading text-lg font-semibold mb-3">Campaign Timeline</h3>
@@ -152,7 +155,7 @@ const CampaignDetails = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {campaigns
-              .filter(c => c.id !== id)
+              .filter(c => c.id !== campaign.id) // Exclude current campaign
               .slice(0, 3)
               .map(campaign => (
                 <div key={campaign.id} className="bg-white rounded-lg shadow-sm overflow-hidden">

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -6,32 +5,74 @@ import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { initializeDonation, redirectToPaystack } from '@/lib/api';
 
 interface DonationFormProps {
+  campaignId: number;
   campaignName?: string;
 }
 
-const DonationForm = ({ campaignName = "Local Youth Sports" }: DonationFormProps) => {
+const DonationForm = ({ 
+  campaignId, 
+  campaignName = "Local Youth Sports" 
+}: DonationFormProps) => {
   const { toast } = useToast();
+  const [email, setEmail] = useState("");
   const [amount, setAmount] = useState<number | string>("");
   const [isRecurring, setIsRecurring] = useState(false);
   const [loading, setLoading] = useState(false);
   
-  const predefinedAmounts = [25, 50, 100, 250];
+  const predefinedAmounts = [5, 10, 15, 25];
   
   const handleDonate = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!amount || !email) {
+      toast({
+        title: "Error",
+        description: "Please enter both email and amount",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
     
-    // This would be replaced with actual Stripe integration
-    setTimeout(() => {
-      setLoading(false);
-      toast({
-        title: "Thank you for your donation!",
-        description: `Your $${amount} donation to ${campaignName} has been processed.`,
+    try {
+      const numericAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+      
+      console.log("Sending donation data:", {
+      email,
+      amount: numericAmount,
+      campaign_id: campaignId,
+      is_recurring: isRecurring
+    });
+
+      const response = await initializeDonation({
+        email,
+        amount: numericAmount * 100, // Convert to kobo (Paystack expects amount in kobo)
+        campaign_id: campaignId,
+        is_recurring: isRecurring
       });
-      setAmount("");
-    }, 1500);
+
+      if (response.status) {
+        window.location.href = response.data.authorization_url;
+      } else {
+        toast({
+          title: "Error",
+          description: response.message || "Failed to initialize payment",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An error occurred while processing your donation",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
   
   return (
@@ -42,6 +83,19 @@ const DonationForm = ({ campaignName = "Local Youth Sports" }: DonationFormProps
       </p>
       
       <form onSubmit={handleDonate} className="space-y-6">
+        {/* Add email input field */}
+        <div>
+          <Label htmlFor="email" className="mb-1 block">Email Address</Label>
+          <Input 
+            id="email"
+            type="email" 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="your@email.com"
+            required
+          />
+        </div>
+        
         <div>
           <Label htmlFor="amount" className="mb-1 block">Select or enter donation amount</Label>
           <div className="grid grid-cols-2 gap-3 mb-3">
@@ -67,6 +121,7 @@ const DonationForm = ({ campaignName = "Local Youth Sports" }: DonationFormProps
               onChange={(e) => setAmount(e.target.value)} 
               placeholder="Other amount"
               className="pl-8"
+              required
             />
           </div>
         </div>
@@ -84,14 +139,14 @@ const DonationForm = ({ campaignName = "Local Youth Sports" }: DonationFormProps
           <Button 
             type="submit" 
             className="w-full h-12 text-lg" 
-            disabled={!amount || loading}
+            disabled={!amount || !email || loading}
           >
             {loading ? "Processing..." : isRecurring ? "Donate Monthly" : "Donate Now"}
           </Button>
         </div>
         
         <div className="text-center text-sm text-gray-500">
-          <p>Secure payment processed by Stripe</p>
+          <p>Secure payment processed by Paystack</p>
           <p className="mt-1">100% of your donation goes to the team</p>
         </div>
       </form>

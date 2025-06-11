@@ -1,7 +1,7 @@
 
 // Mock data for youth sports campaigns
 export interface Campaign {
-  id: string;
+  id: number;
   title: string;
   description: string;
   fullDescription: string;
@@ -16,7 +16,7 @@ export interface Campaign {
 
 export const campaigns: Campaign[] = [
   {
-    id: "east-side-eagles",
+    id: 1,
     title: "East Side Eagles Basketball Team",
     description: "Help the Eagles get new uniforms and equipment for the upcoming season.",
     fullDescription: "The East Side Eagles basketball team has been bringing our community together for over 10 years. Most of our players come from low-income families and need support to continue playing.",
@@ -34,7 +34,7 @@ export const campaigns: Campaign[] = [
     location: "East Side Community Center, Athletic City"
   },
   {
-    id: "riverside-runners",
+    id: 2,
     title: "Riverside Runners Track Team",
     description: "Send our track team to the state championship - they've earned it!",
     fullDescription: "The Riverside Runners have qualified for the state championship! Help us cover travel expenses, accommodations, and entry fees for 12 dedicated athletes.",
@@ -52,7 +52,7 @@ export const campaigns: Campaign[] = [
     location: "Riverside High School, Athletic City"
   },
   {
-    id: "westlake-warriors",
+    id: 3,
     title: "Westlake Warriors Soccer Equipment",
     description: "Help us replace worn-out soccer gear for our growing youth program.",
     fullDescription: "The Westlake Warriors youth soccer program has doubled in size! We need to replace old equipment and purchase additional gear to accommodate all our young players.",
@@ -70,7 +70,7 @@ export const campaigns: Campaign[] = [
     location: "Westlake Community Fields, Athletic City"
   },
   {
-    id: "northside-knights",
+    id: 4,
     title: "Northside Knights Baseball Fund",
     description: "Support inner-city youth baseball players with equipment and field time.",
     fullDescription: "The Northside Knights give kids from our city's most underserved neighborhoods a chance to play baseball, learn teamwork, and have fun in a safe environment.",
