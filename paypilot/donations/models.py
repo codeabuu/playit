@@ -6,9 +6,9 @@ class RecurringDonation(models.Model):
     """
     email = models.EmailField()
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    campaign_id = models.CharField(max_length=100)
+    # campaign_id = models.CharField(max_length=100)
     paystack_authorization_code = models.CharField(max_length=100)
-    paystack_subscription_code = models.CharField(max_length=100)
+    paystack_subscription_code = models.CharField(max_length=100, blank=True, null=True)
     paystack_customer_code = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
