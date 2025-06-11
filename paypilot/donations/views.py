@@ -215,4 +215,3 @@ def campaign_stats(request, campaign_id):
             is_active=True
         ).count()
     }, status=status.HTTP_200_OK)
-
