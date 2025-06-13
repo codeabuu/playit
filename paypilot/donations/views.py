@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from rest_framework import status
+from rest_framework import status, generics
 import uuid
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .services import PaystackService
-from .models import RecurringDonation
+from .models import Campaign, Donation, RecurringDonation
 from django.conf import settings
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
@@ -12,13 +12,16 @@ from rest_framework.permissions import AllowAny
 from django.views.decorators.csrf import csrf_exempt
 from datetime import timedelta
 from django.utils import timezone
-
-
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+import json
+from django.db.models import Sum
+from decimal import Decimal
+from .serializers import CampaignSerializer
 
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([AllowAny])
-
 @csrf_exempt
 def initialize_donation(request):
     """
@@ -30,8 +33,15 @@ def initialize_donation(request):
     is_recurring = request.data.get('is_recurring', False)
 
     if not email or not amount or not campaign_id:
-        return Response({"error": "Email, amount, and campaign_id are required."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "Email, amount, and campaign_id are required."}, 
+                       status=status.HTTP_400_BAD_REQUEST)
     
+    try:
+        campaign = Campaign.objects.get(id=uuid.UUID(campaign_id))
+    except Campaign.DoesNotExist:
+        return Response({"error": "Campaign not found"}, 
+                       status=status.HTTP_404_NOT_FOUND)
+
     reference = str(uuid.uuid4())
     callback_url = f"{settings.FRONTEND_URL}/donations/verify/{reference}/"
 
@@ -41,64 +51,71 @@ def initialize_donation(request):
         "reference": reference
     }
 
-    if is_recurring:
-        response = PaystackService.initialize_transaction(
-            email=email,
-            amount=amount,
-            reference=reference,
-            callback_url=callback_url,
-            metadata=metadata
-        )
-    else:
-        response = PaystackService.initialize_transaction(
-            email=email,
-            amount=amount,
-            reference=reference,
-            callback_url=callback_url,
-            metadata=metadata
-        )
+    response = PaystackService.initialize_transaction(
+        email=email,
+        amount=amount,
+        reference=reference,
+        callback_url=callback_url,
+        metadata=metadata
+    )
 
     if response.get('status'):
         return Response(response, status=status.HTTP_200_OK)
-    else:
-        return Response({"error": response.get('message', 'Failed to initialize transaction.')}, status=status.HTTP_400_BAD_REQUEST)
-    
-# donations/views.py
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-import json
+    return Response({"error": response.get('message', 'Failed to initialize transaction.')}, 
+                   status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def verify_donation(request, reference):
+    """
+    Verify donation and record it (only first payment counts toward campaign)
+    """
     response = PaystackService.verify_transaction(reference)
     
-    if response.get('status'):
-        data = response.get('data', {})
-        metadata = data.get('metadata', {})
-        is_recurring = metadata.get('is_recurring', False)
-        
-        if is_recurring and data.get('authorization'):
-            # Create recurring donation record
-            RecurringDonation.objects.create(
-                email=data.get('customer', {}).get('email'),
-                amount=data.get('amount') / 100,  # Convert from kobo
-                # campaign_id=metadata.get('campaign_id'),
-                paystack_authorization_code=data.get('authorization').get('authorization_code'),
-                paystack_subscription_code=data.get('subscription_code'),
-                paystack_customer_code=data.get('customer').get('customer_code')
-            )
-        
-        return Response({
-            "status": "success",
-            "message": "Payment verified",
-            "data": {
-                "amount": data.get('amount') / 100,
-                "is_recurring": is_recurring,
-                "campaign_id": metadata.get('campaign_id')
-            }
-        }, status=status.HTTP_200_OK)
-    else:
+    if not response.get('status'):
         return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+    data = response.get('data', {})
+    metadata = data.get('metadata', {})
+    campaign_id = metadata.get('campaign_id')
+    is_recurring = str(metadata.get('is_recurring', False)).lower() == 'true'
+    amount = Decimal(data.get('amount', 0)) / 100  # Convert from kobo
+
+    try:
+        campaign = Campaign.objects.get(id=uuid.UUID(campaign_id))
+    except Campaign.DoesNotExist:
+        return Response({"error": "Campaign not found"}, 
+                       status=status.HTTP_400_BAD_REQUEST)
+
+    # Create the donation record (counts toward campaign total)
+    donation = Donation.objects.create(
+        campaign=campaign,
+        amount=amount,
+        paystack_reference=reference,
+        is_recurring=is_recurring
+    )
+
+    campaign.save()
+
+    # If recurring, create authorization record (future payments won't be counted)
+    if is_recurring and data.get('authorization'):
+        RecurringDonation.objects.create(
+            email=data.get('customer', {}).get('email'),
+            amount=amount,
+            paystack_authorization_code=data.get('authorization').get('authorization_code'),
+            paystack_subscription_code=data.get('subscription_code'),
+            paystack_customer_code=data.get('customer').get('customer_code')
+        )
+
+    return Response({
+        "status": "success",
+        "message": "Payment verified",
+        "data": {
+            "amount": float(amount),
+            "is_recurring": is_recurring,
+            "campaign_id": campaign_id,
+            "new_total": float(campaign.total_raised)  # Updated total
+        }
+    }, status=status.HTTP_200_OK)
 
 @csrf_exempt
 def paystack_webhook(request):
@@ -187,31 +204,45 @@ def paystack_webhook(request):
 
     return JsonResponse({"status": "error"}, status=400)
 
-
-
-# donations/views.py
-from django.db.models import Sum
-from decimal import Decimal
-
 @api_view(['GET'])
 def campaign_stats(request, campaign_id):
-    # Calculate total from one-time donations (you might need to track this in another way)
-    # For this example, we'll assume you have a way to track one-time donations
+    """
+    Get campaign statistics (only counts first payments)
+    """
+    try:
+        campaign = Campaign.objects.get(campaign_id=campaign_id)
+    except Campaign.DoesNotExist:
+        return Response({"error": "Campaign not found"}, 
+                       status=status.HTTP_404_NOT_FOUND)
     
-    # Calculate recurring donations
-    recurring_total = RecurringDonation.objects.filter(
-        campaign_id=campaign_id,
+    # Get count of active recurring donations for this campaign
+    active_recurring = RecurringDonation.objects.filter(
+        donation__campaign=campaign,
         is_active=True
-    ).aggregate(total=Sum('amount'))['total'] or Decimal('0.00')
-    
-    # In a real implementation, you'd combine this with one-time donations
-    total_raised = recurring_total  # Add one-time donations here
+    ).count()
     
     return Response({
-        "campaign_id": campaign_id,
-        "total_raised": float(total_raised),
-        "active_recurring_donations": RecurringDonation.objects.filter(
-            campaign_id=campaign_id,
-            is_active=True
-        ).count()
+        "campaign_id": campaign.campaign_id,
+        "total_raised": float(campaign.total_raised),
+        "progress_percentage": float(campaign.progress_percentage),
+        "active_recurring_donations": active_recurring
     }, status=status.HTTP_200_OK)
+
+# @csrf_exempt
+class CampaignListAPIView(generics.ListAPIView):
+    serializer_class = CampaignSerializer
+
+    def get_queryset(self):
+        return Campaign.objects.filter(is_active=True)
+
+# @csrf_exempt
+class CampaignDetailAPIView(generics.RetrieveAPIView):
+    serializer_class = CampaignSerializer
+    lookup_field = 'id'
+
+    def get_queryset(self):
+        return Campaign.objects.filter(is_active=True, is_hidden=False)
+    
+    def get_object(self):
+        campaign_id = self.kwargs.get('id')
+        return get_object_or_404(Campaign, id=campaign_id, is_active=True, is_hidden=False)

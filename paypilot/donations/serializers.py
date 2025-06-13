@@ -1,0 +1,22 @@
+from rest_framework import serializers
+from .models import Campaign, Donation, RecurringDonation
+
+class CampaignSerializer(serializers.ModelSerializer):
+    campaign_id = serializers.CharField(source='id', read_only=True)
+    total_raised = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
+    progress_percentage = serializers.SerializerMethodField()
+    amount_still_needed = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Campaign
+        fields = [
+            'campaign_id', 'title', 'description', 'full_description', 'image',
+            'goal_amount', 'total_raised', 'progress_percentage',
+            'amount_still_needed', 'team_needs'
+        ]
+    
+    def get_progress_percentage(self, obj):
+        return round(obj.progress_percentage, 1)
+
+    def get_amount_still_needed(self, obj):
+        return round(obj.goal_amount - obj.total_raised, 2)
