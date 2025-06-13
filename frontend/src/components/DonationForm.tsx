@@ -8,7 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { initializeDonation, redirectToPaystack } from '@/lib/api';
 
 interface DonationFormProps {
-  campaignId: number;
+  campaignId: string;
   campaignName?: string;
 }
 

@@ -14,6 +14,7 @@ import Contact from "./pages/Contact";
 import ThankYou from "./pages/ThankYou";
 import NotFound from "./pages/NotFound";
 import DonationVerify from "./components/paymentverif";
+import CampaignForm from "./components/adminfom";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,8 @@ const App = () => (
               <Route path="/thank-you" element={<ThankYou />} />
               <Route path="*" element={<NotFound />} />
               <Route path="/donations/verify/:reference" element={<DonationVerify />} />
+              <Route path="/admin/campaigns/new" element={<CampaignForm />} />
+
             </Routes>
           </div>
           <Footer />

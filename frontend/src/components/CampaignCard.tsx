@@ -10,7 +10,6 @@ interface CampaignCardProps {
   image: string;
   goalAmount: number;
   raisedAmount: number;
-  daysLeft: number;
 }
 
 const CampaignCard = ({
@@ -20,8 +19,11 @@ const CampaignCard = ({
   image,
   goalAmount,
   raisedAmount,
-  daysLeft
 }: CampaignCardProps) => {
+  if (!id) {
+    console.error('CampaignCard received undefined ID:', { id, title });
+    return null; // or a fallback UI
+  }
   const percentRaised = Math.min(Math.round((raisedAmount / goalAmount) * 100), 100);
   
   return (
@@ -55,9 +57,9 @@ const CampaignCard = ({
           </div>
           
           <div className="flex justify-between">
-            <span className="text-sm text-gray-500">
+            {/* <span className="text-sm text-gray-500">
               {daysLeft} {daysLeft === 1 ? 'day' : 'days'} left
-            </span>
+            </span> */}
             <span className="text-sm font-medium text-primary">
               {percentRaised}% funded
             </span>

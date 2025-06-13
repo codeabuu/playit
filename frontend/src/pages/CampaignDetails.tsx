@@ -1,14 +1,81 @@
 import { useParams, Link } from 'react-router-dom';
-import { campaigns } from '@/lib/data';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Share2, Calendar, MapPin, ArrowLeft } from 'lucide-react';
 import DonationForm from '@/components/DonationForm';
+import { useEffect, useState } from 'react';
+import { fetchCampaignById, fetchCampaigns, Campaign } from '@/lib/api';
 
 const CampaignDetails = () => {
-  const { id } = useParams<{ id: string }>();
-  const campaign = campaigns.find(c => c.id === Number(id));
+  const { id } = useParams<{ id: string }>()!;
+  console.log('URL ID parameter:', id, 'Type:', typeof id);
+  const [campaign, setCampaign] = useState<Campaign | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [otherCampaigns, setOtherCampaigns] = useState<Campaign[]>([]);
+  const isValidUUID = (id: string | undefined) => {
+    return id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+  };
+
+   useEffect(() => {
+    const loadCampaign = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        if (!isValidUUID(id)) {
+          throw new Error('Invalid campaign URL - ID format is incorrect');
+        }
+
+        const data = await fetchCampaignById(id!);
+        if (!data) {
+          throw new Error('Campaign not found');
+        }
+
+        setCampaign(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load campaign');
+        console.error('Campaign load error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCampaign();
+  }, [id]);
+
+  if (!isValidUUID(id)) {
+    return (
+      <div className="container-custom py-20 text-center">
+        <h1 className="text-2xl font-bold mb-4">Invalid Campaign URL</h1>
+        <p className="mb-4">The campaign link appears to be broken or incomplete.</p>
+        <Button asChild>
+          <Link to="/campaigns">Browse All Campaigns</Link>
+        </Button>
+      </div>
+    );
+  }
   
+  if (loading) {
+    return (
+      <div className="container-custom py-20 text-center">
+        <p>Loading campaign details...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container-custom py-20 text-center">
+        <h1 className="font-heading text-3xl font-semibold mb-4">Error Loading Campaign</h1>
+        <p className="mb-8 text-red-500">{error}</p>
+        <Button asChild>
+          <Link to="/campaigns">Browse Active Campaigns</Link>
+        </Button>
+      </div>
+    );
+  }
+
   if (!campaign) {
     return (
       <div className="container-custom py-20 text-center">
@@ -20,8 +87,9 @@ const CampaignDetails = () => {
       </div>
     );
   }
-  
+
   const percentRaised = Math.min(Math.round((campaign.raisedAmount / campaign.goalAmount) * 100), 100);
+  // const daysLeft = campaign.daysLeft || 30; // Fallback to 30 days if not provided
   
   return (
     <main>
@@ -62,10 +130,10 @@ const CampaignDetails = () => {
                     <div className="text-2xl font-bold text-primary">{percentRaised}%</div>
                     <div className="text-sm text-gray-600">Funded</div>
                   </div>
-                  <div className="bg-gray-50 p-4 rounded-md">
-                    <div className="text-2xl font-bold text-primary">{campaign.daysLeft}</div>
+                  {/* <div className="bg-gray-50 p-4 rounded-md">
+                    <div className="text-2xl font-bold text-primary">{daysLeft}</div>
                     <div className="text-sm text-gray-600">Days Left</div>
-                  </div>
+                  </div> */}
                   <div className="bg-gray-50 p-4 rounded-md">
                     <div className="text-2xl font-bold text-primary">
                       {Math.ceil(campaign.goalAmount - campaign.raisedAmount).toLocaleString()}
@@ -75,15 +143,15 @@ const CampaignDetails = () => {
                 </div>
                 
                 <div className="mt-6 flex justify-between items-center">
-                  <div className="flex items-center text-gray-600 text-sm">
+                  {/* <div className="flex items-center text-gray-600 text-sm">
                     <MapPin size={16} className="mr-1" />
-                    {campaign.location}
-                  </div>
+                    {campaign.location || "Various locations"}
+                  </div> */}
                   
-                  <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                  {/* <Button variant="ghost" size="sm" className="flex items-center gap-1">
                     <Share2 size={16} />
                     <span>Share</span>
-                  </Button>
+                  </Button> */}
                 </div>
               </div>
               
@@ -91,7 +159,7 @@ const CampaignDetails = () => {
               <div className="mb-8">
                 <h2 className="font-heading text-2xl font-semibold mb-4">Our Story</h2>
                 <div className="prose max-w-none">
-                  {campaign.story.split('\n\n').map((paragraph, index) => (
+                  {(campaign.story || campaign.fullDescription).split('\n\n').map((paragraph, index) => (
                     <p key={index} className="mb-4 text-gray-700">{paragraph}</p>
                   ))}
                 </div>
@@ -115,8 +183,8 @@ const CampaignDetails = () => {
             <div className="lg:col-span-1">
               <div className="sticky top-20">
                 <DonationForm
-                campaignId={campaign.id}
-                campaignName={campaign.title}
+                  campaignId={campaign.id}
+                  campaignName={campaign.title}
                 />
                 
                 <div className="bg-gray-50 rounded-lg p-6 mt-6">
@@ -124,7 +192,7 @@ const CampaignDetails = () => {
                   <div className="flex items-start gap-3">
                     <Calendar size={20} className="text-primary mt-1" />
                     <div>
-                      <p className="font-medium">Campaign ends in {campaign.daysLeft} days</p>
+                      {/* <p className="font-medium">Campaign ends in {daysLeft} days</p> */}
                       <p className="text-gray-600 text-sm">
                         Donations after the end date will still be accepted and used by the team.
                       </p>
@@ -154,7 +222,7 @@ const CampaignDetails = () => {
           <h2 className="font-heading text-2xl font-semibold mb-6">Other Teams That Need Support</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {campaigns
+            {otherCampaigns
               .filter(c => c.id !== campaign.id) // Exclude current campaign
               .slice(0, 3)
               .map(campaign => (
@@ -174,7 +242,7 @@ const CampaignDetails = () => {
                     </h3>
                     <div className="flex justify-between text-sm mb-2">
                       <span>${campaign.raisedAmount.toLocaleString()} raised</span>
-                      <span>{campaign.daysLeft} days left</span>
+                      {/* <span>{campaign.daysLeft || 30} days left</span> */}
                     </div>
                     <Progress value={Math.round((campaign.raisedAmount / campaign.goalAmount) * 100)} className="h-1 mb-4" />
                     <Button asChild size="sm" className="w-full">

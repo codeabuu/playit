@@ -1,18 +1,35 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CampaignCard from '@/components/CampaignCard';
-import { campaigns } from '@/lib/data';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
+import { fetchCampaigns, Campaign } from '@/lib/api';
 
 const Campaigns = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  
-  const filteredCampaigns = campaigns.filter(campaign => 
-    campaign.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadCampaigns = async () => {
+      try {
+        const data = await fetchCampaigns();
+        console.log('Fetched campaigns:', data); 
+        setCampaigns(data);
+      } catch (error) {
+        console.error('Failed to fetch campaigns:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCampaigns();
+  }, []);
+
+  const filteredCampaigns = campaigns.filter(campaign =>
+    campaign.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
     campaign.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
+
   return (
     <main>
       {/* Header */}
@@ -25,7 +42,7 @@ const Campaigns = () => {
           </p>
         </div>
       </section>
-      
+
       {/* Search and Campaigns */}
       <section className="py-16">
         <div className="container-custom">
@@ -41,8 +58,10 @@ const Campaigns = () => {
               />
             </div>
           </div>
-          
-          {filteredCampaigns.length > 0 ? (
+
+          {loading ? (
+            <p className="text-center">Loading campaigns...</p>
+          ) : filteredCampaigns.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredCampaigns.map(campaign => (
                 <CampaignCard
@@ -53,7 +72,7 @@ const Campaigns = () => {
                   image={campaign.image}
                   goalAmount={campaign.goalAmount}
                   raisedAmount={campaign.raisedAmount}
-                  daysLeft={campaign.daysLeft}
+                  // daysLeft={campaign.daysLeft}
                 />
               ))}
             </div>
@@ -67,17 +86,17 @@ const Campaigns = () => {
           )}
         </div>
       </section>
-      
+
       {/* Help Start a Campaign */}
       <section className="py-16 bg-gray-50">
         <div className="container-custom text-center">
           <h2 className="font-heading text-3xl font-semibold mb-4">Need Help for Your Team?</h2>
           <p className="text-gray-600 text-lg max-w-3xl mx-auto mb-8">
-            If you're a coach or team manager looking to raise funds for your youth sports team, 
+            If you're a coach or team manager looking to raise funds for your youth sports team,
             we'd love to help you create a campaign.
           </p>
-          <a 
-            href="/contact" 
+          <a
+            href="/contact"
             className="btn-primary inline-block"
           >
             Submit Your Team

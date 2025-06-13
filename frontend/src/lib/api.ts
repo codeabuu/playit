@@ -6,7 +6,7 @@ const API_BASE_URL = 'http://127.0.0.1:8000';
 interface DonationInitRequest {
   email: string;
   amount: number;
-  campaign_id: number;
+  campaign_id: string;
   is_recurring?: boolean;
 }
 
@@ -19,17 +19,7 @@ interface DonationInitResponse {
   };
 }
 
-interface CampaignStats {
-  campaign_id: number;
-  total_raised: number;
-  active_recurring_donations: number;
-}
 
-interface GenericResponse {
-  status: string;
-  message?: string;
-  data?: any;
-}
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -43,15 +33,25 @@ const apiClient = axios.create({
 });
 
 // Initialize Donation
-export const initializeDonation = async (
-  data: DonationInitRequest
-): Promise<DonationInitResponse> => {
+export const initializeDonation = async (data: {
+  email: string;
+  amount: number;
+  campaign_id: string;
+  is_recurring: boolean;
+}) => {
   try {
-    console.log('Sending payload:', JSON.stringify(data, null, 2));
-    const response = await apiClient.post<DonationInitResponse>('/initialize', data);
+    const payload = {
+      email: data.email,
+      amount: data.amount,
+      campaign_id: data.campaign_id,  // Change from campaign_id to id
+      is_recurring: data.is_recurring
+    };
+
+    console.log('Sending payload:', payload);
+    const response = await axios.post(`${API_BASE_URL}/initialize`, payload);
     return response.data;
   } catch (error) {
-    handleError(error);
+    console.error('API Error:', error.response?.data);
     throw error;
   }
 };
@@ -73,19 +73,6 @@ export const verifyDonation = async (reference: string): Promise<{status: boolea
   }
 };
 
-// Get Campaign Stats
-export const getCampaignStats = async (
-  campaignId: number
-): Promise<CampaignStats> => {
-  try {
-    const response = await apiClient.get<CampaignStats>(`/campaign/${campaignId}/stats/`);
-    return response.data;
-  } catch (error) {
-    handleError(error);
-    throw error;
-  }
-};
-
 // Redirect to Paystack
 export const redirectToPaystack = (url: string): void => {
   window.location.href = url;
@@ -99,4 +86,49 @@ const handleError = (error: unknown): void => {
   } else {
     console.error('Unexpected Error:', error);
   }
+};
+
+
+export interface Campaign {
+  id: string;  // Changed from number to string
+  title: string;
+  description: string;
+  fullDescription: string;
+  image: string;
+  goalAmount: number;
+  raisedAmount: number;
+  teamNeeds: string[];
+  story: string;
+}
+
+export const fetchCampaigns = async (): Promise<Campaign[]> => {
+  const response = await axios.get(`${API_BASE_URL}/api/campaigns/`);
+  return response.data.map((campaign: any) => ({
+    id: campaign.campaign_id,  // Now keeping as string
+    title: campaign.title,
+      description: campaign.description,
+      fullDescription: campaign.full_description,
+      image: campaign.image,
+      goalAmount: campaign.goal_amount,
+      raisedAmount: campaign.total_raised,
+      teamNeeds: campaign.team_needs,
+      story: campaign.full_description,
+  }));
+  
+};
+
+export const fetchCampaignById = async (id: string): Promise<Campaign | null> => {
+  const response = await axios.get(`${API_BASE_URL}/api/campaigns/${id}/`);
+  const data = response.data;
+  return {
+    id: data.campaign_id,
+    title: data.title,
+    description: data.description,
+    fullDescription: data.full_description,
+    image: data.image,
+    goalAmount: data.goal_amount,
+    raisedAmount: data.total_raised,
+    teamNeeds: data.team_needs,
+    story: data.full_description,
+  };
 };

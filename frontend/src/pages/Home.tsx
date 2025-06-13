@@ -3,13 +3,36 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import CampaignCard from '@/components/CampaignCard';
 import TestimonialCard from '@/components/TestimonialCard';
-import { campaigns, testimonials, impactStats } from '@/lib/data';
+import { testimonials, impactStats } from '@/lib/data';
+import { useEffect, useState } from 'react';
+import { fetchCampaigns, Campaign } from '@/lib/api';
 import { CheckCircle } from 'lucide-react';
 
 const Home = () => {
-  // Show only the first 3 campaigns on the homepage
-  const featuredCampaigns = campaigns.slice(0, 3);
-  
+  const [featuredCampaigns, setFeaturedCampaigns] = useState<Campaign[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const campaigns = await fetchCampaigns();
+      const topThree = campaigns.slice(0, 3);
+      setFeaturedCampaigns(topThree);
+    } catch (error) {
+      console.error('Failed to load campaigns:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+}, []);
+
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <main>
       {/* Hero Section with Background Image */}
@@ -99,18 +122,23 @@ const Home = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredCampaigns.map(campaign => (
-              <CampaignCard
-                key={campaign.id}
-                id={campaign.id}
-                title={campaign.title}
-                description={campaign.description}
-                image={campaign.image}
-                goalAmount={campaign.goalAmount}
-                raisedAmount={campaign.raisedAmount}
-                daysLeft={campaign.daysLeft}
-              />
-            ))}
+            {loading ? (
+  <p className="text-center text-gray-500 col-span-full">Loading campaigns...</p>
+) : (
+  featuredCampaigns.map(campaign => (
+    <CampaignCard
+      // key={campaign.id}
+      id={campaign.id}
+      title={campaign.title}
+      description={campaign.description}
+      image={campaign.image}
+      goalAmount={campaign.goalAmount}
+      raisedAmount={campaign.raisedAmount}
+      // daysLeft={campaign.daysLeft}
+    />
+  ))
+)}
+
           </div>
           
           <div className="text-center mt-12">
