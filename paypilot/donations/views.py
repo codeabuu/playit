@@ -17,7 +17,7 @@ from django.http import JsonResponse
 import json
 from django.db.models import Sum
 from decimal import Decimal
-from .serializers import CampaignSerializer
+from .serializers import CampaignSerializer, DonationInitSerializer
 
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
@@ -27,14 +27,19 @@ def initialize_donation(request):
     """
     Initialize a donation transaction.
     """
+    
     email = request.data.get('email')
     amount = request.data.get('amount')
     campaign_id = request.data.get('campaign_id')
     is_recurring = request.data.get('is_recurring', False)
 
-    if not email or not amount or not campaign_id:
-        return Response({"error": "Email, amount, and campaign_id are required."}, 
+    if not amount or not campaign_id:
+        return Response({"error": "Amount and campaign_id are required."}, 
                        status=status.HTTP_400_BAD_REQUEST)
+    
+    if is_recurring and not email:
+        return Response({"error": "Email is required for recurring donations."}, 
+                      status=status.HTTP_400_BAD_REQUEST)
     
     try:
         campaign = Campaign.objects.get(id=uuid.UUID(campaign_id))
@@ -51,8 +56,10 @@ def initialize_donation(request):
         "reference": reference
     }
 
+    paystack_email = email if email else f"anonymous_{reference[:8]}@"
+
     response = PaystackService.initialize_transaction(
-        email=email,
+        email=paystack_email,
         amount=amount,
         reference=reference,
         callback_url=callback_url,
@@ -98,8 +105,13 @@ def verify_donation(request, reference):
 
     # If recurring, create authorization record (future payments won't be counted)
     if is_recurring and data.get('authorization'):
+        customer_email = data.get('customer', {}).get('email')
+        if not customer_email:
+            return Response({"error": "Customer email is required for recurring donations."}, 
+                           status=status.HTTP_400_BAD_REQUEST)
+        
         RecurringDonation.objects.create(
-            email=data.get('customer', {}).get('email'),
+            email=customer_email,
             amount=amount,
             paystack_authorization_code=data.get('authorization').get('authorization_code'),
             paystack_subscription_code=data.get('subscription_code'),

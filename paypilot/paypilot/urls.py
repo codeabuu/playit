@@ -7,6 +7,9 @@ from donations.views import(
     campaign_stats
 )
 from donations.views import CampaignListAPIView, CampaignDetailAPIView
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('initialize', initialize_donation, name='initialize_donation'),
@@ -16,3 +19,6 @@ urlpatterns = [
     path('api/campaigns/', CampaignListAPIView.as_view(), name='campaign_list'),
     path('api/campaigns/<uuid:id>/', CampaignDetailAPIView.as_view(), name='campaign_detail')
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

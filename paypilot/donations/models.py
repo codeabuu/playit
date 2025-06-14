@@ -30,7 +30,7 @@ class Campaign(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     full_description = models.TextField(blank=True, null=True)
-    image = models.URLField() 
+    image = models.ImageField(upload_to='campaign_images/') 
     goal_amount = models.DecimalField(
         max_digits=10, 
         decimal_places=2,

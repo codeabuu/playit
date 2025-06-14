@@ -20,3 +20,14 @@ class CampaignSerializer(serializers.ModelSerializer):
 
     def get_amount_still_needed(self, obj):
         return round(obj.goal_amount - obj.total_raised, 2)
+    
+class DonationInitSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=False)
+    amount = serializers.DecimalField(max_digits=10, decimal_places=2)
+    campaign_id = serializers.UUIDField()
+    is_recurring = serializers.BooleanField(default=False)
+
+    def validate(self, data):
+        if data['is_recurring'] and not data.get('email'):
+            raise serializers.ValidationError("Email is required for recurring donations.")
+        return data

@@ -52,6 +52,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8000",
 ]
 
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 ROOT_URLCONF = 'paypilot.urls'
 
 REST_FRAMEWORK = {
