@@ -27,15 +27,24 @@ const DonationForm = ({
   const handleDonate = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!amount || !email) {
+    if (!amount) {
       toast({
         title: "Error",
-        description: "Please enter both email and amount",
+        description: "Please enter a donation amount",
         variant: "destructive",
       });
       return;
     }
 
+    if (isRecurring && !email) {
+      toast({
+        title: "Error",
+        description: "Email is required for monthly donations",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setLoading(true);
     
     try {
@@ -49,7 +58,7 @@ const DonationForm = ({
     });
 
       const response = await initializeDonation({
-        email,
+        email: isRecurring ? email : `anonymous-${Date.now()}@donation.example.com`,
         amount: numericAmount * 100, // Convert to kobo (Paystack expects amount in kobo)
         campaign_id: campaignId,
         is_recurring: isRecurring
@@ -64,10 +73,10 @@ const DonationForm = ({
           variant: "destructive",
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "An error occurred while processing your donation",
+        description: error.response?.data?.error || "An error occurred",
         variant: "destructive",
       });
     } finally {
@@ -85,15 +94,20 @@ const DonationForm = ({
       <form onSubmit={handleDonate} className="space-y-6">
         {/* Add email input field */}
         <div>
-          <Label htmlFor="email" className="mb-1 block">Email Address</Label>
+          <Label htmlFor="email" className="mb-1 block">Email Address {isRecurring && <span className="text-red-500">*</span>}</Label>
           <Input 
             id="email"
             type="email" 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="your@email.com"
-            required
+            placeholder={isRecurring ? "your@email.com (required)" : "your@email.com (optional)"}
+            required={isRecurring}
           />
+          {isRecurring && (
+            <p className="mt-1 text-sm text-gray-500">
+              Required in case you want to cancel.
+            </p>
+          )}
         </div>
         
         <div>
@@ -130,7 +144,10 @@ const DonationForm = ({
           <Checkbox 
             id="recurring" 
             checked={isRecurring} 
-            onCheckedChange={(checked) => setIsRecurring(checked as boolean)} 
+            onCheckedChange={(checked) => {
+              setIsRecurring(checked as boolean);
+              if (!checked) setEmail("");
+            }} 
           />
           <Label htmlFor="recurring" className="cursor-pointer">Make this a monthly donation</Label>
         </div>
@@ -139,7 +156,7 @@ const DonationForm = ({
           <Button 
             type="submit" 
             className="w-full h-12 text-lg" 
-            disabled={!amount || !email || loading}
+            disabled={!amount || (isRecurring && !email) || loading}
           >
             {loading ? "Processing..." : isRecurring ? "Donate Monthly" : "Donate Now"}
           </Button>

@@ -34,16 +34,17 @@ const apiClient = axios.create({
 
 // Initialize Donation
 export const initializeDonation = async (data: {
-  email: string;
+  email?: string;  // Made optional
   amount: number;
   campaign_id: string;
   is_recurring: boolean;
 }) => {
   try {
+    // Create payload with proper field names and fallback for email
     const payload = {
-      email: data.email,
+      email: data.email || `anonymous-${Date.now()}@example.com`, // Fallback email
       amount: data.amount,
-      campaign_id: data.campaign_id,  // Change from campaign_id to id
+      campaign_id: data.campaign_id,  // Keep as campaign_id to match backend
       is_recurring: data.is_recurring
     };
 
