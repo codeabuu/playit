@@ -142,7 +142,7 @@ export const impactStats: ImpactStat[] = [
     description: "100% of donations go directly to youth sports programs"
   },
   {
-    value: "12",
+    value: "20+",
     label: "Communities",
     description: "Local neighborhoods benefiting from youth sports"
   }

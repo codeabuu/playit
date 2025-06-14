@@ -5,7 +5,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { CheckCircle, Mail, MapPin, Phone } from 'lucide-react';
+import { sendContactMessage } from '@/lib/api';
+
+
 
 const Contact = () => {
   const { toast } = useToast();
@@ -25,25 +28,42 @@ const Contact = () => {
     }));
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+
+  try {
+    const response = await sendContactMessage(formData);
     
-    // Simulate form submission
-    setTimeout(() => {
-      setLoading(false);
+    if (response.success) {
       toast({
-        title: "Message sent!",
-        description: "We'll get back to you as soon as possible.",
+        title: "Message sent successfully!", // Keep title as string
+        description: (
+          <div className="flex items-center gap-2">
+            <CheckCircle className="h-5 w-5 text-green-500" />
+            <span>Thank you for contacting us. We'll get back to you soon.</span>
+          </div>
+        ),
+        className: "border-green-500 bg-green-50",
       });
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } else {
+      toast({
+        title: "Error sending message",
+        description: response.error || "Please try again later.",
+        variant: "destructive",
       });
-    }, 1500);
-  };
+    }
+  } catch (error) {
+    toast({
+      title: "Error",
+      description: "An unexpected error occurred",
+      variant: "destructive",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
   
   return (
     <main>
@@ -220,9 +240,9 @@ const Contact = () => {
                   </div>
                 </li>
               </ol>
-              <Button size="lg" className="w-full sm:w-auto">
-                Submit Your Team
-              </Button>
+              <p className="font-bold w-full sm:w-auto text-center sm:text-middle">
+                  Send us your team details above.
+              </p>
             </div>
           </div>
         </div>

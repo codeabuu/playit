@@ -133,3 +133,36 @@ export const fetchCampaignById = async (id: string): Promise<Campaign | null> =>
     story: data.full_description,
   };
 };
+
+// Add this function below your existing API calls
+
+export const sendContactMessage = async (formData: {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}): Promise<{ success: boolean; message?: string; error?: string }> => {
+  try {
+    const response = await apiClient.post('/api/contact/', formData);
+    
+    // Return the complete success response
+    return {
+      success: response.data.success || false,
+      message: response.data.message
+    };
+  } catch (error) {
+    handleError(error);
+    
+    if (axios.isAxiosError(error) && error.response?.data) {
+      return {
+        success: false,
+        error: error.response.data.error || "Failed to send message"
+      };
+    }
+    
+    return {
+      success: false,
+      error: "An unexpected error occurred"
+    };
+  }
+};
