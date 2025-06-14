@@ -17,7 +17,9 @@ from django.http import JsonResponse
 import json
 from django.db.models import Sum
 from decimal import Decimal
-from .serializers import CampaignSerializer, DonationInitSerializer
+from .serializers import CampaignSerializer
+from django.core.mail import send_mail
+
 
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
@@ -258,3 +260,54 @@ class CampaignDetailAPIView(generics.RetrieveAPIView):
     def get_object(self):
         campaign_id = self.kwargs.get('id')
         return get_object_or_404(Campaign, id=campaign_id, is_active=True, is_hidden=False)
+    
+@csrf_exempt
+@api_view(['POST'])
+def contact_form(request):
+    """
+    Handle contact form submissions.
+    """
+    if request.method == "POST":
+        try:
+            data = request.data
+            name = data.get('name')
+            email = data.get('email')
+            message = data.get('message')
+            subject = data.get('subject')
+
+            if not all([name, email, message, subject]):
+                return Response(
+                    {"success": False, "error": "All fields are required."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            full_message = f"""
+            New contact form submission:
+            Name: {name}
+            Email: {email}
+            Subject: {subject}
+            Message: {message}
+            """
+            
+            send_mail(
+                subject=f"Contact Form Submission: {subject}",
+                message=full_message,
+                from_email="sjepjenny@gmail.com",
+                recipient_list=["sjepjenny@gmail.com"],
+                fail_silently=False
+            )
+
+            return Response(
+                {"success": True, "message": "Your message has been sent successfully."},
+                status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            return Response(
+                {"success": False, "error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    return Response(
+        {"success": False, "error": "Invalid request method"},
+        status=status.HTTP_405_METHOD_NOT_ALLOWED
+    )

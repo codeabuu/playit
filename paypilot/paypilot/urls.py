@@ -4,7 +4,8 @@ from donations.views import(
     verify_donation,
     paystack_webhook,
     initialize_donation,
-    campaign_stats
+    campaign_stats,
+    contact_form,
 )
 from donations.views import CampaignListAPIView, CampaignDetailAPIView
 from django.conf import settings
@@ -17,7 +18,8 @@ urlpatterns = [
     path('paystack/webhook/', paystack_webhook, name='paystack_webhook'),
     path('campaign/<int:campaign_id>/stats/', campaign_stats, name='campaign_stats'),
     path('api/campaigns/', CampaignListAPIView.as_view(), name='campaign_list'),
-    path('api/campaigns/<uuid:id>/', CampaignDetailAPIView.as_view(), name='campaign_detail')
+    path('api/campaigns/<uuid:id>/', CampaignDetailAPIView.as_view(), name='campaign_detail'),
+    path('api/contact/', contact_form, name='contact_form'),
 ]
 
 if settings.DEBUG:
