@@ -13,9 +13,13 @@ const Navbar = () => {
     <nav className="bg-white shadow-sm py-4 sticky top-0 z-50">
       <div className="container-custom flex justify-between items-center">
         <Link to="/" className="flex items-center gap-2">
-          <Heart className="text-primary" size={24} />
-          <span className="font-heading font-bold text-xl">SportsAid</span>
-        </Link>
+  <img 
+    src="/youthupsbg.png" // Replace with your logo path
+    alt="SportsAid Logo"
+    className="h-10.5 w-10" // Adjust size as needed
+  />
+  <span className="font-heading font-bold text-xl">SportsAid</span>
+</Link>
         
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">

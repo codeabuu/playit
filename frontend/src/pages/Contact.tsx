@@ -240,8 +240,8 @@ const Contact = () => {
                   </div>
                 </li>
               </ol>
-              <p className="font-bold w-full sm:w-auto text-center sm:text-middle">
-                  Send us your team details above.
+              <p className="text-gray-600 w-full sm:w-auto text-center sm:text-left">
+                  Have a question or need help? Just send us a message above — we’ll follow up with a quick form for you to complete.
               </p>
             </div>
           </div>
