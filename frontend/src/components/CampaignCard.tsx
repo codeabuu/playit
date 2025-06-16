@@ -30,7 +30,7 @@ const CampaignCard = ({
     <div className="campaign-card flex flex-col h-full">
       <Link to={`/campaign/${id}`} className="block overflow-hidden">
         <img 
-          src={image} 
+          src={`https://mymedia-x0xy.onrender.com${image}`} 
           alt={title} 
           className="h-48 w-full object-cover hover:scale-105 transition-transform duration-500"
         />
