@@ -28,7 +28,12 @@ SECRET_KEY = 'django-insecure-69(@qa3+)u1wec2y7j_$_php%!1$ef^&ub)yy#u4_t^l0v$+-h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ["https://playit-wqjq.vercel.app/", "https://risetoplay.onrender.com", "127.0.0.1"]
+ALLOWED_HOSTS = [
+    "playit-wqjq.vercel.app", 
+    "risetoplay.onrender.com",
+    "127.0.0.1",
+    "localhost",
+    ]
 
 
 # Application definition
