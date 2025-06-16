@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: paypilot
+    disk:
+      name: media_storage
+      mountPath: /opt/render/project/media  # Critical path for Render
+      sizeGB: 1  # Adjust as needed

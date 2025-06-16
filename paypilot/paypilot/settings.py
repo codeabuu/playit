@@ -73,9 +73,12 @@ CORS_ALLOWED_ORIGINS = [
 
 
 
-MEDIA_URL = 'https://mymedia-x0xy.onrender.com/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
+# MEDIA_URL = 'https://mymedia-x0xy.onrender.com/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
+MEDIA_ROOT = '/opt/render/project/media'  # Must match mountPath
+MEDIA_URL = '/media/'
 
+WHITENOISE_MANIFEST_STRICT = False 
 ROOT_URLCONF = 'paypilot.urls'
 
 REST_FRAMEWORK = {
