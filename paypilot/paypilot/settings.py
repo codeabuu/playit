@@ -34,6 +34,7 @@ ALLOWED_HOSTS = [
     "risetoplay.onrender.com",
     "127.0.0.1",
     "localhost",
+    "mymedia-x0xy.onrender.com",
     ]
 
 
@@ -67,6 +68,7 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "https://playit-wqjq.vercel.app",
     "https://risetoplay.onrender.com",
+    "https://mymedia-x0xy.onrender.com/"
 ]
 
 
