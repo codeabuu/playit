@@ -55,6 +55,7 @@ def initialize_donation(request):
 
     reference = str(uuid.uuid4())
     callback_url = f"{FRONTEND_URL}/donations/verify/{reference}/"
+    print(f"FRONTEND_URL is set to: {FRONTEND_URL}")
 
     metadata = {
         "campaign_id": campaign_id,
