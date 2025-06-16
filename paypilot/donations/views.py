@@ -54,8 +54,8 @@ def initialize_donation(request):
                        status=status.HTTP_404_NOT_FOUND)
 
     reference = str(uuid.uuid4())
-    callback_url = f"{FRONTEND_URL}/donations/verify/{reference}"
-    print(f"FRONTEND_URL is set to: {FRONTEND_URL}")
+    callback_url = f"{FRONTEND_URL.rstrip('/')}/donations/verify/{reference}"
+    print(f"Generated callback URL: {callback_url}")
 
     metadata = {
         "campaign_id": campaign_id,
