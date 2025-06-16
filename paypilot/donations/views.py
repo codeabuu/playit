@@ -19,6 +19,10 @@ from django.db.models import Sum
 from decimal import Decimal
 from .serializers import CampaignSerializer
 from django.core.mail import send_mail
+from decouple import config
+
+FRONTEND_URL = config('FRONTEND_URL')
+
 
 
 @api_view(['POST'])
@@ -50,7 +54,7 @@ def initialize_donation(request):
                        status=status.HTTP_404_NOT_FOUND)
 
     reference = str(uuid.uuid4())
-    callback_url = f"{settings.FRONTEND_URL}/donations/verify/{reference}/"
+    callback_url = f"{FRONTEND_URL}/donations/verify/{reference}/"
 
     metadata = {
         "campaign_id": campaign_id,
