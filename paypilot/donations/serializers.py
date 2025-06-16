@@ -6,6 +6,7 @@ class CampaignSerializer(serializers.ModelSerializer):
     total_raised = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
     progress_percentage = serializers.SerializerMethodField()
     amount_still_needed = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
 
     class Meta:
         model = Campaign
@@ -20,6 +21,16 @@ class CampaignSerializer(serializers.ModelSerializer):
 
     def get_amount_still_needed(self, obj):
         return round(obj.goal_amount - obj.total_raised, 2)
+    
+    def get_image(self, obj):
+        request = self.context.get('request')
+        if obj.image:
+            # Auto builds full URL using request object if available
+            if request:
+                return request.build_absolute_uri(obj.image.url)
+            else:
+                return f"https://mymedia-x0xy.onrender.com{obj.image.url}"
+        return None
     
 class DonationInitSerializer(serializers.Serializer):
     email = serializers.EmailField(required=False)

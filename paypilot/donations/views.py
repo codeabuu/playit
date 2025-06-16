@@ -248,6 +248,11 @@ class CampaignListAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         return Campaign.objects.filter(is_active=True)
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data)
 
 # @csrf_exempt
 class CampaignDetailAPIView(generics.RetrieveAPIView):
@@ -260,6 +265,11 @@ class CampaignDetailAPIView(generics.RetrieveAPIView):
     def get_object(self):
         campaign_id = self.kwargs.get('id')
         return get_object_or_404(Campaign, id=campaign_id, is_active=True, is_hidden=False)
+    
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, context={'request': request})
+        return Response(serializer.data)
     
 @csrf_exempt
 @api_view(['POST'])
