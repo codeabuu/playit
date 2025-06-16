@@ -1,7 +1,7 @@
 // src/api/api.ts
 import axios, { AxiosError } from 'axios';
 
-const API_BASE_URL = 'http://127.0.0.1:8000';
+const API_BASE_URL = 'https://risetoplay.onrender.com';
 
 interface DonationInitRequest {
   email: string;
