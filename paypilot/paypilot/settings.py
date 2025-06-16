@@ -1,6 +1,7 @@
 from pathlib import Path
 from decouple import config
 import dj_database_url
+import os
 
 PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
 PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -69,8 +71,8 @@ CORS_ALLOWED_ORIGINS = [
 
 
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = 'https://mymedia-x0xy.onrender.com/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
 
 ROOT_URLCONF = 'paypilot.urls'
 
