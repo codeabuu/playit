@@ -3,6 +3,7 @@ import CampaignCard from '@/components/CampaignCard';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { fetchCampaigns, Campaign } from '@/lib/api';
+import { Loader2 } from 'lucide-react';
 
 const Campaigns = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -60,7 +61,15 @@ const Campaigns = () => {
           </div>
 
           {loading ? (
-            <p className="text-center">Loading campaigns...</p>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <div className="text-center space-y-2">
+          <h3 className="font-heading text-xl font-semibold">Loading Campaigns</h3>
+          <p className="text-muted-foreground">
+            Gathering the latest youth sports initiatives...
+          </p>
+        </div>
+      </div>
           ) : filteredCampaigns.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredCampaigns.map(campaign => (

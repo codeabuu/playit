@@ -15,6 +15,8 @@ import ThankYou from "./pages/ThankYou";
 import NotFound from "./pages/NotFound";
 import DonationVerify from "./components/paymentverif";
 import CampaignForm from "./components/adminfom";
+import PrivacyPolicy from "./pages/privacy";
+import TermsAndConditions from "./pages/terms";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +39,8 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
               <Route path="/donations/verify/:reference" element={<DonationVerify />} />
               <Route path="/admin/campaigns/new" element={<CampaignForm />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsAndConditions />} />
 
             </Routes>
           </div>

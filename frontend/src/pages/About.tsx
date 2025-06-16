@@ -31,7 +31,7 @@ const About = () => {
             <div>
               <h2 className="font-heading text-3xl font-semibold mb-6">Keeping Young People Inspired Through Sport</h2>
               <p className="text-gray-700 mb-4">
-                SportsAid was founded with a simple but powerful belief: that sports can transform young lives. 
+                RiseToPlay was founded with a simple but powerful belief: that sports can transform young lives. 
                 We connect generous donors with youth sports teams in need, ensuring that financial barriers 
                 never prevent children from experiencing the joy and benefits of team sports.
               </p>
@@ -74,7 +74,7 @@ const About = () => {
             
             <div>
               <img 
-                src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&q=80&w=800" 
+                src="kansaspic.jpg" 
                 alt="Kids playing sports" 
                 className="rounded-lg shadow-lg"
               />
@@ -94,7 +94,7 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <img 
-                src="https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&q=80&w=800" 
+                src="founder.jpg" 
                 alt="Founder with youth sports team" 
                 className="rounded-lg shadow-lg"
               />
@@ -103,8 +103,7 @@ const About = () => {
             <div>
               <h3 className="font-heading text-2xl font-semibold mb-4">From Local Team to National Mission</h3>
               <p className="text-gray-700 mb-4">
-                SportsAid began when our founder, Michael Rivera, noticed that his daughter's school basketball 
-                team couldn't afford new uniforms or proper equipment. Many talented players were sitting on 
+                RiseToPlay began when our founder, Michael Rivera, noticed that his daughter's school basketball team couldn't afford new uniforms or proper equipment. Many talented players were sitting on 
                 the sidelines because their families couldn't cover participation fees.
               </p>
               <p className="text-gray-700 mb-4">
@@ -113,7 +112,7 @@ const About = () => {
                 their teams too.
               </p>
               <p className="text-gray-700 mb-4">
-                Recognizing that this was a national issue, Michael launched SportsAid in 2020 to create a 
+                Recognizing that this was a national issue, Michael launched RiseToPlay in 2020 to create a 
                 trusted platform connecting youth sports programs with generous donors who want to make a 
                 difference in young lives.
               </p>
@@ -132,7 +131,7 @@ const About = () => {
           <div className="max-w-3xl mx-auto text-center mb-12">
             <h2 className="font-heading text-3xl font-semibold mb-4">Our Values</h2>
             <p className="text-gray-600 text-lg">
-              These core principles guide everything we do at SportsAid.
+              These core principles guide everything we do at RiseToPlay.
             </p>
           </div>
           

@@ -99,7 +99,7 @@ export interface Testimonial {
 
 export const testimonials: Testimonial[] = [
   {
-    quote: "SportsAid helped our basketball team get new uniforms when we couldn't afford them. Now our team feels proud to represent our school!",
+    quote: "RiseToPlay helped our basketball team get new uniforms when we couldn't afford them. Now our team feels proud to represent our school!",
     author: "Michael Johnson",
     role: "Team Captain, East Side Eagles",
     image: "https://images.unsplash.com/photo-1564564244660-5d73c057f2d2?auto=format&fit=crop&q=80&w=120"

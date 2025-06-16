@@ -7,6 +7,7 @@ import { testimonials, impactStats } from '@/lib/data';
 import { useEffect, useState } from 'react';
 import { fetchCampaigns, Campaign } from '@/lib/api';
 import { CheckCircle } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 const Home = () => {
   const [featuredCampaigns, setFeaturedCampaigns] = useState<Campaign[]>([]);
@@ -29,8 +30,18 @@ const Home = () => {
 }, []);
 
 
-  if (loading) {
-    return <div>Loading...</div>;
+    if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <div className="text-center space-y-2">
+          <h3 className="font-heading text-xl font-semibold">Loading Campaigns</h3>
+          <p className="text-muted-foreground">
+            Gathering the latest youth sports initiatives...
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -39,7 +50,7 @@ const Home = () => {
       <section className="relative py-24">
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1518495973542-4542c06a5843" 
+            src="chosen.jpg"
             alt="Youth playing sports" 
             className="w-full h-full object-cover"
           />

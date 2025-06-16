@@ -9,8 +9,16 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           <div>
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <Heart className="text-primary" size={24} />
-              <span className="font-heading font-bold text-xl">SportsAid</span>
+              <img 
+    src="/youthupsbg.png" // Replace with your logo path
+    alt="RiseToPlay Logo"
+    className="h-10.5 w-10 object-contain -ml-4" // Adjust size as needed
+  />
+  <img 
+    src="/Hlogobg.png" 
+    alt="RiseToPlay" 
+    className="h-10 object-contain -ml-2" // Text logo - adjust height as needed
+  />
             </Link>
             <p className="text-gray-600 mb-4">
               Empowering youth through sports. We help local teams raise funds for equipment, 
@@ -59,6 +67,9 @@ const Footer = () => {
               <li>
                 <Link to="/privacy" className="text-gray-600 hover:text-primary transition-colors">Privacy Policy</Link>
               </li>
+              <li>
+                <Link to="/terms" className="text-gray-600 hover:text-primary transition-colors">Terms of Use and Charity Disclosure</Link>
+              </li>
             </ul>
           </div>
           
@@ -71,8 +82,8 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={20} className="text-primary flex-shrink-0" />
-                <a href="mailto:contact@sportsaid.org" className="text-gray-600 hover:text-primary transition-colors">
-                  contact@sportsaid.org
+                <a href="mailto:contact@RiseToPlay.org" className="text-gray-600 hover:text-primary transition-colors">
+                  contact@RiseToPlay.org
                 </a>
               </li>
             </ul>
@@ -80,7 +91,7 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-gray-200 pt-6 text-center text-gray-500 text-sm">
-          <p>&copy; {new Date().getFullYear()} SportsAid. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} RiseToPlay. All rights reserved.</p>
         </div>
       </div>
     </footer>

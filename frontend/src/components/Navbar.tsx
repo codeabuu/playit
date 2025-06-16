@@ -15,10 +15,15 @@ const Navbar = () => {
         <Link to="/" className="flex items-center gap-2">
   <img 
     src="/youthupsbg.png" // Replace with your logo path
-    alt="SportsAid Logo"
-    className="h-10.5 w-10" // Adjust size as needed
+    alt="RiseToPlay Logo"
+    className="h-10.5 w-10 object-contain -ml-4" // Adjust size as needed
   />
-  <span className="font-heading font-bold text-xl">SportsAid</span>
+  <img 
+    src="/Hlogobg.png" 
+    alt="RiseToPlay" 
+    className="h-10 object-contain -ml-2" // Text logo - adjust height as needed
+  />
+  {/* <span className="font-heading font-bold text-xl">RiseToPlay</span> */}
 </Link>
         
         {/* Desktop Navigation */}
