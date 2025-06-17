@@ -4,12 +4,18 @@ import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { fetchCampaigns, Campaign } from '@/lib/api';
 import { Loader2 } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 
 const Campaigns = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   useEffect(() => {
     const loadCampaigns = async () => {
