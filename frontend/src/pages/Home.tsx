@@ -47,35 +47,36 @@ const Home = () => {
   return (
     <main>
       {/* Hero Section with Background Image */}
-      <section className="relative py-24">
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="chosen.jpg"
-            alt="Youth playing sports" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black/50"></div>
-        </div>
-        <div className="container-custom relative z-10">
-          <div className="max-w-2xl mx-auto text-center">
-            <h1 className="font-heading text-4xl md:text-5xl font-bold mb-6 leading-tight text-white">
-              Support Youth Sports in Your Community
-            </h1>
-            <p className="text-xl mb-8 text-white">
-              Help young athletes stay focused, build confidence, and develop teamwork skills through sports.
-              Your donation makes a direct impact on a child's life.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild size="lg" variant="secondary" className="text-primary font-semibold">
-                <Link to="/campaigns">Support a Team</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10">
-                <Link to="/about">Learn More</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <section className="relative py-16 md:py-20 lg:py-24">  {/* Reduced vertical padding */}
+  <div className="absolute inset-0 z-0">
+    <img 
+      src="chosen.jpg"
+      alt="Youth playing sports" 
+      className="w-full h-full object-cover"
+      loading="eager"
+    />
+    <div className="absolute inset-0 bg-black/50"></div>
+  </div>
+  <div className="container-custom relative z-10">
+    <div className="max-w-2xl mx-auto text-center px-4">  {/* Added horizontal padding */}
+      <h1 className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 leading-snug text-white">
+        Support Youth Sports in Your Community
+      </h1>
+      <p className="text-base md:text-lg lg:text-xl mb-6 md:mb-8 text-white">
+        Help young athletes stay focused, build confidence, and develop teamwork skills through sports.
+        Your donation makes a direct impact on a child's life.
+      </p>
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+        <Button asChild size="lg" variant="secondary" className="text-primary font-semibold min-h-[48px]">
+          <Link to="/campaigns">Support a Team</Link>
+        </Button>
+        <Button asChild size="lg" variant="outline" className="min-h-[48px] bg-transparent text-white border-white hover:bg-white/10">
+          <Link to="/about">Learn More</Link>
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>
       
       {/* Trust Elements */}
       <section className="py-16 bg-white">
