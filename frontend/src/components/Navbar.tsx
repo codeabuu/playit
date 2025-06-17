@@ -19,7 +19,7 @@ const Navbar = () => {
     className="h-10.5 w-10 object-contain -ml-4" // Adjust size as needed
   />
   <img 
-    src="/Hlogobg.png" 
+    src="/risetopbg.png" 
     alt="RiseToPlay" 
     className="h-10 object-contain -ml-2" // Text logo - adjust height as needed
   />
