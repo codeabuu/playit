@@ -80,7 +80,7 @@ const Home = () => {
       {/* Trust Elements */}
       <section className="py-16 bg-white">
         <div className="container-custom">
-          <div className="text-center max-w-3xl mx-auto mb-12">
+          <div className="text-center max-w-3xl mx-auto mb-7">
             <h2 className="font-heading text-3xl font-semibold mb-4">Why Support Youth Sports?</h2>
             <p className="text-gray-600 text-lg">
               Your donation directly impacts young athletes and their communities, creating positive change that lasts a lifetime.
@@ -124,7 +124,7 @@ const Home = () => {
       {/* Featured Campaigns */}
       <section className="py-16 bg-gray-50">
         <div className="container-custom">
-          <div className="text-center mb-12">
+          <div className="text-center mb-10">
             <h2 className="font-heading text-3xl font-semibold mb-4">Active Campaigns</h2>
             <p className="text-gray-600 text-lg max-w-3xl mx-auto">
               These teams need your support now. Every contribution helps provide equipment,
