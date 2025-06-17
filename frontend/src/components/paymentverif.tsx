@@ -132,17 +132,17 @@ const DonationVerify = () => {
               <motion.div variants={itemVariants}>
                 <div className="bg-blue-50 rounded-lg p-4 mb-6 max-w-md mx-auto">
                   <p className="text-blue-800">
-                    You'll be redirected to our homepage in {countdown} seconds
+                    You'll be redirected to our campaigns in {countdown} seconds
                   </p>
                 </div>
               </motion.div>
 
               <motion.div variants={itemVariants}>
                 <Button 
-                  onClick={() => navigate('/')}
+                  onClick={() => navigate('/campaigns')}
                   className="w-full max-w-xs bg-gradient-to-r from-blue-500 to-emerald-500 hover:from-blue-600 hover:to-emerald-600 text-white py-6 text-lg"
                 >
-                  Return to Home
+                  Return to Campaigns
                 </Button>
               </motion.div>
             </div>
