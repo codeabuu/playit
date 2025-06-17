@@ -79,16 +79,16 @@ const Home = () => {
 </section>
       
       {/* Trust Elements */}
-      <section className="py-16 bg-white">
+      <section className="py-12 bg-white">
         <div className="container-custom">
-          <div className="text-center max-w-3xl mx-auto mb-7">
-            <h2 className="font-heading text-3xl font-semibold mb-4">Why Support Youth Sports?</h2>
+          <div className="text-center max-w-3xl mx-auto mb-6">
+            <h2 className="font-heading text-2xl md:text-3xl font-semibold mb-3">Why Support Youth Sports?</h2>
             <p className="text-gray-600 text-lg">
               Your donation directly impacts young athletes and their communities, creating positive change that lasts a lifetime.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="bg-gray-50 p-6 rounded-lg">
               <div className="flex items-center gap-3 mb-4">
                 <CheckCircle className="text-success" size={24} />
@@ -123,9 +123,9 @@ const Home = () => {
       </section>
       
       {/* Featured Campaigns */}
-      <section className="py-16 bg-gray-50">
+      <section className="pt-8 pb-12 md:pt-10 md:pb-16 bg-gray-50">
         <div className="container-custom">
-          <div className="text-center mb-10">
+          <div className="text-center mb-8">
             <h2 className="font-heading text-3xl font-semibold mb-4">Active Campaigns</h2>
             <p className="text-gray-600 text-lg max-w-3xl mx-auto">
               These teams need your support now. Every contribution helps provide equipment,
@@ -133,7 +133,7 @@ const Home = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {loading ? (
   <p className="text-center text-gray-500 col-span-full">Loading campaigns...</p>
 ) : (
@@ -153,7 +153,7 @@ const Home = () => {
 
           </div>
           
-          <div className="text-center mt-12">
+          <div className="text-center mt-10">
             <Button asChild size="lg">
               <Link to="/campaigns">View All Campaigns</Link>
             </Button>
