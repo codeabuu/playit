@@ -66,8 +66,13 @@ const CampaignCard = ({
           </div>
           
           <Button asChild className="w-full">
-            <Link to={`/campaign/${id}`}>Support This Team</Link>
-          </Button>
+  <Link 
+    to={`/campaign/${id}`}
+    onClick={() => window.scrollTo(0, 0)}
+  >
+    Support This Team
+  </Link>
+</Button>
         </div>
       </div>
     </div>
