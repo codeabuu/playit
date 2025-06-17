@@ -114,7 +114,7 @@ export const fetchCampaigns = async (): Promise<Campaign[]> => {
       goalAmount: campaign.goal_amount,
       raisedAmount: campaign.total_raised,
       teamNeeds: campaign.team_needs,
-      story: campaign.our_story,
+      ourStory: campaign.our_story,
   }));
   
 };
