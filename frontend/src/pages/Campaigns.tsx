@@ -5,6 +5,7 @@ import { Search } from 'lucide-react';
 import { fetchCampaigns, Campaign } from '@/lib/api';
 import { Loader2 } from 'lucide-react';
 
+
 const Campaigns = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
