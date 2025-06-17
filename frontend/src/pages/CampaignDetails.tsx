@@ -190,7 +190,7 @@ const CampaignDetails = () => {
               <div className="mb-8">
                 <h2 className="font-heading text-2xl font-semibold mb-4">Our Story</h2>
                 <div className="prose max-w-none">
-                  {(campaign.ourStory).split('\n\n').map((paragraph, index) => (
+                  {(campaign.story || campaign.fullDescription).split('\n\n').map((paragraph, index) => (
                     <p key={index} className="mb-4 text-gray-700">{paragraph}</p>
                   ))}
                 </div>

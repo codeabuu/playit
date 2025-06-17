@@ -36,7 +36,7 @@ class Campaign(models.Model):
         decimal_places=2,
         validators=[MinValueValidator(Decimal('0.01'))]
     )
-    our_story = models.TextField(blank=True, null=True, help_text="Story about the campaign or team")
+    # our_story = models.TextField(blank=True, null=True, help_text="Story about the campaign or team")
     team_needs = models.JSONField(default=list)
     manual_total_raised = models.DecimalField(
     max_digits=10,

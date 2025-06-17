@@ -38,7 +38,7 @@ class CampaignAdmin(admin.ModelAdmin):
     readonly_fields = ('id', 'progress_percentage_display', 'total_raised_display', 'amount_still_needed_display')
     fieldsets = (
         ('Basic Information', {
-            'fields': ('id', 'title', 'description', 'full_description', 'our_story', 'image')
+            'fields': ('id', 'title', 'description', 'full_description', 'image')
         }),
         ('Financial Information', {
             'fields': (
