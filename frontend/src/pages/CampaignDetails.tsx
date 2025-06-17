@@ -94,16 +94,20 @@ const CampaignDetails = () => {
   return (
     <main>
       {/* Campaign Header */}
-      <section className="bg-primary text-white py-10">
-        <div className="container-custom">
-          <Link to="/campaigns" className="inline-flex items-center text-blue-100 hover:text-white mb-4">
-            <ArrowLeft size={16} className="mr-2" />
-            Back to All Campaigns
-          </Link>
-          <h1 className="font-heading text-2xl md:text-3xl font-bold mb-3">{campaign.title}</h1>
-          <p className="text-base md:text-lg mb-0">{campaign.fullDescription}</p>
-        </div>
-      </section>
+      <section className="bg-primary text-white py-8">  {/* Reduced padding */}
+  <div className="container-custom">
+    <Link to="/campaigns" className="inline-flex items-center text-blue-100 hover:text-white mb-3 text-sm">  {/* Smaller back link */}
+      <ArrowLeft size={14} className="mr-1.5" />  {/* Smaller icon */}
+      Back to All Campaigns
+    </Link>
+    <h1 className="font-heading text-xl md:text-2xl font-bold mb-2">  {/* Reduced heading size */}
+      {campaign.title}
+    </h1>
+    <p className="text-sm md:text-base mb-0">  {/* Smaller paragraph text */}
+      {campaign.fullDescription}
+    </p>
+  </div>
+</section>
       
       {/* Campaign Content */}
       <section className="py-12">
