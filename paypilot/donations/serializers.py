@@ -25,11 +25,7 @@ class CampaignSerializer(serializers.ModelSerializer):
     def get_image(self, obj):
         request = self.context.get('request')
         if obj.image:
-            # Auto builds full URL using request object if available
-            if request:
-                return request.build_absolute_uri(obj.image.url)
-            else:
-                return f"https://mymedia-x0xy.onrender.com{obj.image.url}"
+            return request.build_absolute_uri(obj.image.url) if request else obj.image.url
         return None
     
 class DonationInitSerializer(serializers.Serializer):

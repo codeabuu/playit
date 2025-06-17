@@ -6,7 +6,7 @@ import json
 from django.db.models import Sum
 from django.utils import timezone
 from datetime import timedelta
-
+from cloudinary.models import CloudinaryField
 
 class RecurringDonation(models.Model):
     """
@@ -30,7 +30,7 @@ class Campaign(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
     full_description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='campaign_images/') 
+    image = CloudinaryField('image', blank=True, null=True) 
     goal_amount = models.DecimalField(
         max_digits=10, 
         decimal_places=2,

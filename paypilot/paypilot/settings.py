@@ -2,6 +2,7 @@ from pathlib import Path
 from decouple import config
 import dj_database_url
 import os
+import cloudinary
 
 PAYSTACK_PUBLIC_KEY = config('PAYSTACK_PUBLIC_KEY')
 PAYSTACK_SECRET_KEY = config('PAYSTACK_SECRET_KEY')
@@ -50,8 +51,26 @@ INSTALLED_APPS = [
     'rest_framework',
     'donations',
     'corsheaders',
+    'cloudinary',
+    'cloudinary_storage',
 
 ]
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+cloudinary.config(
+    cloud_name=config('CLOUDINARY_CLOUD_NAME'),
+    api_key=config('CLOUDINARY_API_KEY'),
+    api_secret=config('CLOUDINARY_API_SECRET')
+)
+
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET'),
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -68,13 +87,12 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "https://playit-wqjq.vercel.app",
     "https://risetoplay.onrender.com",
-    "https://mymedia-x0xy.onrender.com/"
 ]
 
 
 
-MEDIA_URL = 'https://mymedia-x0xy.onrender.com/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
+# MEDIA_URL = 'https://mymedia-x0xy.onrender.com/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
 
 ROOT_URLCONF = 'paypilot.urls'
 
