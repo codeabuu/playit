@@ -144,7 +144,20 @@ const CampaignDetails = () => {
                     </div>
                     <div className="text-sm text-gray-600">Still Needed</div>
                   </div>
-                </div>
+                  <div className="bg-gray-50 p-4 rounded-md flex flex-col justify-center">
+                      <Button 
+                        size="sm" 
+                        className="w-full"
+                        onClick={() => {
+                          document.getElementById('donation-form')?.scrollIntoView({
+                            behavior: 'smooth'
+                          });
+                        }}
+                      >
+                        Donate Now
+                      </Button>
+                    </div>
+                  </div>
                 
                 <div className="mt-6 flex justify-between items-center">
                   {/* <div className="flex items-center text-gray-600 text-sm">
@@ -185,7 +198,7 @@ const CampaignDetails = () => {
             
             {/* Sidebar - 1/3 width */}
             <div className="lg:col-span-1">
-              <div className="sticky top-20">
+              <div id="donation-form" className="sticky top-20">
                 <DonationForm
                   campaignId={campaign.id}
                   campaignName={campaign.title}
