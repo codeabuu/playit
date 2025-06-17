@@ -30,19 +30,19 @@ const Home = () => {
 }, []);
 
 
-    if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        <div className="text-center space-y-2">
-          <h3 className="font-heading text-xl font-semibold">Loading Campaigns</h3>
-          <p className="text-muted-foreground">
-            Gathering the latest youth sports initiatives...
-          </p>
-        </div>
-      </div>
-    );
-  }
+  //   if (loading) {
+  //   return (
+  //     <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+  //       <Loader2 className="h-12 w-12 animate-spin text-primary" />
+  //       <div className="text-center space-y-2">
+  //         <h3 className="font-heading text-xl font-semibold">Loading Campaigns</h3>
+  //         <p className="text-muted-foreground">
+  //           Gathering the latest youth sports initiatives...
+  //         </p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <main>
@@ -133,31 +133,38 @@ const Home = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {loading ? (
-  <p className="text-center text-gray-500 col-span-full">Loading campaigns...</p>
-) : (
-  featuredCampaigns.map(campaign => (
-    <CampaignCard
-      // key={campaign.id}
-      id={campaign.id}
-      title={campaign.title}
-      description={campaign.description}
-      image={campaign.image}
-      goalAmount={campaign.goalAmount}
-      raisedAmount={campaign.raisedAmount}
-      // daysLeft={campaign.daysLeft}
-    />
-  ))
-)}
-
-          </div>
-          
-          <div className="text-center mt-10">
-            <Button asChild size="lg">
-              <Link to="/campaigns">View All Campaigns</Link>
-            </Button>
-          </div>
+          {loading ? (
+            <div className="flex flex-col items-center justify-center min-h-[200px] gap-4">
+              <Loader2 className="h-12 w-12 animate-spin text-primary" />
+              <div className="text-center space-y-2">
+                <h3 className="font-heading text-xl font-semibold">Loading Campaigns</h3>
+                <p className="text-muted-foreground">
+                  Gathering the latest youth sports initiatives...
+                </p>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {featuredCampaigns.map(campaign => (
+                  <CampaignCard
+                    key={campaign.id}
+                    id={campaign.id}
+                    title={campaign.title}
+                    description={campaign.description}
+                    image={campaign.image}
+                    goalAmount={campaign.goalAmount}
+                    raisedAmount={campaign.raisedAmount}
+                  />
+                ))}
+              </div>
+              <div className="text-center mt-10">
+                <Button asChild size="lg">
+                  <Link to="/campaigns">View All Campaigns</Link>
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </section>
       
