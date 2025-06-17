@@ -1,7 +1,7 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { Share2, Calendar, MapPin, ArrowLeft, ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
+import { Share2, Calendar, MapPin, ArrowLeft } from 'lucide-react';
 import DonationForm from '@/components/DonationForm';
 import { useEffect, useState } from 'react';
 import { fetchCampaignById, fetchCampaigns, Campaign } from '@/lib/api';
@@ -14,7 +14,6 @@ const CampaignDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [otherCampaigns, setOtherCampaigns] = useState<Campaign[]>([]);
-  const [otherCampaignsLoading, setOtherCampaignsLoading] = useState(true); 
   const isValidUUID = (id: string | undefined) => {
     return id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
   };
@@ -249,30 +248,16 @@ const CampaignDetails = () => {
       </section>
       
       {/* Other Campaigns */}
-     {/* Other Campaigns Section */}
-<section className="py-12 bg-gray-50">
-  <div className="container-custom">
-    <h2 className="font-heading text-2xl font-semibold mb-6">Other Teams That Need Support</h2>
-    
-    {otherCampaignsLoading ? (
-      <div className="flex justify-center py-8">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    ) : (
-      <div className="relative">
-        {/* Scrollable container */}
-        <div className="overflow-x-auto pb-4"> {/* Added horizontal scroll */}
-          {/* Container with fixed width to enable scrolling */}
-          <div className="flex space-x-6 w-max"> {/* Changed to flex layout */}
+      <section className="py-12 bg-gray-50">
+        <div className="container-custom">
+          <h2 className="font-heading text-2xl font-semibold mb-6">Other Teams That Need Support</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {otherCampaigns
-              .filter(c => c.id !== id)
-              .slice(0, 5) // Show more since we can scroll
+              .filter(c => c.id !== campaign.id) // Exclude current campaign
+              .slice(0, 3)
               .map(campaign => (
-                <div 
-                  key={campaign.id} 
-                  className="bg-white rounded-lg shadow-sm overflow-hidden"
-                  style={{ minWidth: '300px' }} // Fixed card width
-                >
+                <div key={campaign.id} className="bg-white rounded-lg shadow-sm overflow-hidden">
                   <Link to={`/campaign/${campaign.id}`}>
                     <img 
                       src={campaign.image} 
@@ -288,6 +273,7 @@ const CampaignDetails = () => {
                     </h3>
                     <div className="flex justify-between text-sm mb-2">
                       <span>${campaign.raisedAmount.toLocaleString()} raised</span>
+                      {/* <span>{campaign.daysLeft || 30} days left</span> */}
                     </div>
                     <Progress value={Math.round((campaign.raisedAmount / campaign.goalAmount) * 100)} className="h-1 mb-4" />
                     <Button 
@@ -306,22 +292,7 @@ const CampaignDetails = () => {
             }
           </div>
         </div>
-        
-        {/* Optional scroll indicators (only visible when scrollable) */}
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 hidden md:block">
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <ChevronLeft className="h-5 w-5" />
-          </Button>
-        </div>
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden md:block">
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <ChevronRight className="h-5 w-5" />
-          </Button>
-        </div>
-      </div>
-    )}
-  </div>
-</section>
+      </section>
     </main>
   );
 };
