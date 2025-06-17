@@ -45,6 +45,19 @@ const CampaignDetails = () => {
     loadCampaign();
   }, [id]);
 
+  useEffect(() => {
+    const loadOtherCampaigns = async () => {
+      try {
+        const allcampaigns = await fetchCampaigns();
+        setOtherCampaigns(allcampaigns);
+      } catch (err) {
+        console.error('Failed to load other campaigns:', err);
+      }
+    };
+
+    loadOtherCampaigns();
+  }, []);
+
   if (!isValidUUID(id)) {
     return (
       <div className="container-custom py-20 text-center">
@@ -264,15 +277,15 @@ const CampaignDetails = () => {
                     </div>
                     <Progress value={Math.round((campaign.raisedAmount / campaign.goalAmount) * 100)} className="h-1 mb-4" />
                     <Button 
-  size="sm" 
-  className="w-full"
-  onClick={() => {
-    window.scrollTo(0, 0);
-    navigate(`/campaign/${campaign.id}`);
-  }}
->
-  Support This Team
-</Button>
+                      size="sm" 
+                      className="w-full"
+                      onClick={() => {
+                        window.scrollTo(0, 0);
+                        navigate(`/campaign/${campaign.id}`);
+                      }}
+                    >
+                      Support This Team
+                    </Button>
                   </div>
                 </div>
               ))
