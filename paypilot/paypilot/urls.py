@@ -14,7 +14,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('initialize', initialize_donation, name='initialize_donation'),
-    path('/verify/<uuid:reference>/', verify_donation, name='verify_donation'),
+    path('donations/verify/<uuid:reference>/', verify_donation, name='verify_donation'),
     path('paystack/webhook/', paystack_webhook, name='paystack_webhook'),
     path('campaign/<int:campaign_id>/stats/', campaign_stats, name='campaign_stats'),
     path('api/campaigns/', CampaignListAPIView.as_view(), name='campaign_list'),

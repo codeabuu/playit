@@ -60,7 +60,7 @@ export const initializeDonation = async (data: {
 // Verify Donation
 export const verifyDonation = async (reference: string): Promise<{status: boolean, message: string}> => {
   try {
-    const response = await apiClient.get(`/verify/${reference}/`);
+    const response = await apiClient.get(`/donations/verify/${reference}/`);
     return {
       status: response.data.status === "success",
       message: response.data.message || "Thank you for your donation!"
