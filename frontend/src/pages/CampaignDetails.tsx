@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Share2, Calendar, MapPin, ArrowLeft } from 'lucide-react';
@@ -8,6 +8,7 @@ import { fetchCampaignById, fetchCampaigns, Campaign } from '@/lib/api';
 
 const CampaignDetails = () => {
   const { id } = useParams<{ id: string }>()!;
+  const navigate = useNavigate();
   console.log('URL ID parameter:', id, 'Type:', typeof id);
   const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [loading, setLoading] = useState(true);
@@ -262,9 +263,16 @@ const CampaignDetails = () => {
                       {/* <span>{campaign.daysLeft || 30} days left</span> */}
                     </div>
                     <Progress value={Math.round((campaign.raisedAmount / campaign.goalAmount) * 100)} className="h-1 mb-4" />
-                    <Button asChild size="sm" className="w-full">
-                      <Link to={`/campaign/${campaign.id}`}>Support This Team</Link>
-                    </Button>
+                    <Button 
+  size="sm" 
+  className="w-full"
+  onClick={() => {
+    window.scrollTo(0, 0);
+    navigate(`/campaign/${campaign.id}`);
+  }}
+>
+  Support This Team
+</Button>
                   </div>
                 </div>
               ))
