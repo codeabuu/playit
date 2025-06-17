@@ -34,15 +34,17 @@ const Campaigns = () => {
   return (
     <main>
       {/* Header */}
-      <section className="bg-primary text-white py-16">
-        <div className="container-custom text-center">
-          <h1 className="font-heading text-4xl font-bold mb-4">Support Youth Sports Teams</h1>
-          <p className="text-xl max-w-3xl mx-auto">
-            Browse active campaigns and help young athletes achieve their full potential.
-            Every donation makes a difference.
-          </p>
-        </div>
-      </section>
+      <section className="bg-primary text-white py-12 md:py-16">  {/* Reduced vertical padding on mobile */}
+  <div className="container-custom text-center">
+    <h1 className="font-heading text-2xl md:text-3xl font-bold mb-3">  {/* Reduced heading size */}
+      Support Youth Sports Teams
+    </h1>
+    <p className="text-base md:text-lg max-w-3xl mx-auto">  {/* Smaller paragraph text */}
+      Browse active campaigns and help young athletes achieve their full potential.
+      Every donation makes a difference.
+    </p>
+  </div>
+</section>
 
       {/* Search and Campaigns */}
       <section className="py-16">
