@@ -1,7 +1,7 @@
 // src/api/api.ts
 import axios, { AxiosError } from 'axios';
 
-const API_BASE_URL = 'https://risetoplay.onrender.com';
+const API_BASE_URL = 'https://playit-production.up.railway.app';
 
 interface DonationInitRequest {
   email: string;
