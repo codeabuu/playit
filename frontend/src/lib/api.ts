@@ -95,7 +95,6 @@ export interface Campaign {
   title: string;
   description: string;
   fullDescription: string;
-  ourStory: string;
   image: string;
   goalAmount: number;
   raisedAmount: number;
@@ -114,7 +113,7 @@ export const fetchCampaigns = async (): Promise<Campaign[]> => {
       goalAmount: campaign.goal_amount,
       raisedAmount: campaign.total_raised,
       teamNeeds: campaign.team_needs,
-      ourStory: campaign.our_story,
+      story: campaign.full_description,
   }));
   
 };
@@ -127,7 +126,6 @@ export const fetchCampaignById = async (id: string): Promise<Campaign | null> =>
     title: data.title,
     description: data.description,
     fullDescription: data.full_description,
-    ourStory: data.our_story,
     image: data.image,
     goalAmount: data.goal_amount,
     raisedAmount: data.total_raised,
